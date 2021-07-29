@@ -2,19 +2,7 @@ from tkinter import *
 import aiml
 import os
 from Bot_commands import *
-import logging
-
-# TODO: Start Logging
-# Create and configure logger
-logging.basicConfig (filename="newfile.log",
-                     format='%(message)s',
-                     filemode='w')
-
-# Creating an object
-logger = logging.getLogger()
-
-# Setting the threshold of logger to DEBUG
-logger.setLevel (logging.DEBUG)
+from Weather import LiveWeather
 
 window = Tk()
 window.geometry("500x470")
@@ -23,7 +11,7 @@ window.configure(bg = "#ffffff")
 entry_input = StringVar()
 
 def send_input_msg():
-    bot_commands = ['/delete', '/reload', '/learn', '/quit', '/help', '/math', '/meaning']
+    bot_commands = ['/delete', '/reload', '/learn', '/quit', '/help', '/math', '/meaning','/weather']
     delete = '/delete'
     reload = '/reload'
     learn = '/learn'
@@ -31,6 +19,7 @@ def send_input_msg():
     help_ = '/help'
     math = '/math'
     meaning_ = '/meaning'
+    weather = '/weather'
     x = ' '
 
     chat_area.config(state="normal")
@@ -40,13 +29,10 @@ def send_input_msg():
     entry1.delete(0,'end')
 
     if meaning_ in str(input_):
-        # TODO split the input
         bot_input = input_.split(x)
-        logger.debug(bot_input)
-        logger.debug(input_)
+    
         check_command = check_custom_commands(bot_input[0])
         
-        # TODO check which command it is
         if check_custom_commands(bot_input[0]) == 'meaning':
             
             output = meaning(bot_input[1])
@@ -58,8 +44,6 @@ def send_input_msg():
     elif help_ in input_:
         # split the input
         bot_input = input_.split(x)
-        logger.debug(bot_input)
-        logger.debug(input_)
         check_command = check_custom_commands(bot_input[0])
         
         # check which command it is
@@ -75,8 +59,6 @@ def send_input_msg():
 
         # split the input
         bot_input = input_.split(x)
-        logger.debug(bot_input)
-        logger.debug(input_)
         check_command = check_custom_commands(bot_input[0])
         
         # check which command it is
@@ -87,14 +69,16 @@ def send_input_msg():
             chat_area.insert(Y,' Bot >> Not a custom command. Type "/help" for a list of possible commands\n')
             
         chat_area.config(state='disabled')
-    
+
+    elif weather in input_:
+
+        n = input_.split('/')
+        output = LiveWeather(n[2],n[3])
+        chat_area.insert(INSERT,' Bot >> '+str(output)+'\n')
     elif learn in input_:
 
         # split the input
         bot_input = input_.split(x)
-        logger.debug(bot_input)
-        logger.debug(input_)
-        check_command = check_custom_commands(bot_input[0])
         
         # check which command it is
         if check_custom_commands(bot_input[0]) == 'learn':
@@ -109,27 +93,18 @@ def send_input_msg():
 
         # split the input
         bot_input = input_.split(x)
-        logger.debug(bot_input)
-        logger.debug(input_)
-        check_command = check_custom_commands(bot_input[0])
-        
+                
         # check which command it is
         if check_custom_commands(bot_input[0]) == 'quit':
-            output = meaning()
-            chat_area.insert(INSERT,' Bot >> '+output+'\n')
+            quit()
         else:
-            chat_area.insert(INSERT,' Bot >> Not a custom command. Type "/help" for a list of possible commands\n')
-            
-        chat_area.config(state='disabled')
+            chat_area.config(state='disabled')
     
     elif math in input_:
 
         # split the input
         bot_input = input_.split(x)
-        logger.debug(bot_input)
-        logger.debug(input_)
-        check_command = check_custom_commands(bot_input[0])
-        
+                
         # check which command it is
         if check_custom_commands(bot_input[0]) == 'math':
             output = do_math(bot_input[1],bot_input[2],bot_input[3])
@@ -144,10 +119,7 @@ def send_input_msg():
 
         # split the input
         bot_input = input_.split(x)
-        logger.debug(bot_input)
-        logger.debug(input_)
-        check_command = check_custom_commands(bot_input[0])
-        
+
         # check which command it is
         if check_custom_commands(bot_input[0]) == 'reload':
             chat_area.insert(INSERT,' Bot >> Reloading...\n')
@@ -180,11 +152,10 @@ canvas = Canvas(
 
 canvas.place(x = 0, y = 0)
 
-entry0_img = PhotoImage(file = "Ui files/img_textBox0.png")
+entry0_img = PhotoImage(file = "Images/img_textBox0.png")
 entry0_bg = canvas.create_image(
     250.0, 223.5,
     image = entry0_img)
-
 
 
 chat_area = Text(
@@ -204,7 +175,7 @@ scroll  = Scrollbar(chat_area)
 scroll.config(command= chat_area.yview)
 scroll.place(relheight=1,relx = 0.98)
 
-img0 = PhotoImage(file = "Ui files/img0.png")
+img0 = PhotoImage(file = "Images/img0.png")
 b0 = Button(
     image = img0,
     borderwidth = 0,
@@ -217,7 +188,7 @@ b0.place(
     width = 66,
     height = 48)
 
-entry1_img = PhotoImage(file = "Ui files/img_textBox1.png")
+entry1_img = PhotoImage(file = "Images/img_textBox1.png")
 entry1_bg = canvas.create_image(
     211.5, 440.0,
     image = entry1_img)

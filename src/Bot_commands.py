@@ -1,23 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
-import logging
 from tkinter import *
-
-# Create and configure logger
-logging.basicConfig (filename="newfile.log",
-                     format='%(message)s',
-                     filemode='w')
-
-# Creating an object
-logger = logging.getLogger ( )
-
-# Setting the threshold of logger to DEBUG
-logger.setLevel (logging.DEBUG)
 
 
 def check_custom_commands(command):
     
-    bot_commands = ['/delete','/reload','/learn','/quit','/help','/math','/meaning']
+    bot_commands = ['/delete','/reload','/learn','/quit','/help','/math','/meaning','/weather']
     if command == bot_commands[0]:
         return 'delete'
 
@@ -38,7 +26,8 @@ def check_custom_commands(command):
     
     elif command == bot_commands[6]:
         return 'meaning'
-    
+    elif command == bot_commands[7]:
+        return 'weather'
     else:
         return 'Nothing'
     

@@ -1,0 +1,13 @@
+['/meaning', 'prejudice']
+/meaning prejudice
+Starting new HTTPS connection (1): www.dictionary.com:443
+https://www.dictionary.com:443 "GET /browse/prejudice HTTP/1.1" 200 34026
+EUC-JP Japanese prober hit error at byte 41
+EUC-KR Korean prober hit error at byte 41
+CP949 Korean prober hit error at byte 41
+Big5 Chinese prober hit error at byte 42
+EUC-TW Taiwan prober hit error at byte 41
+['/math', '3', '-', '1']
+/math 3 - 1
+['/math', '3333333384204402', '-', '242842472420']
+/math 3333333384204402 - 242842472420

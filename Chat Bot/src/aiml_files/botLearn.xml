@@ -1,0 +1,23 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<aiml version="1.0" encoding="UTF-8">
+
+<category>
+<pattern>What is my name ?</pattern>
+<template>Parush!</template>
+</category>
+
+<category>
+<pattern>leaf is of which color</pattern>
+<template>green</template>
+</category>
+
+<category>
+<pattern>wwwssssaaa</pattern>
+<template>got it </template>
+</category>
+
+<category>
+<pattern>Your Custom Ques.</pattern>
+<template>Your Custom Ans.</template>
+</category>
+</aiml>

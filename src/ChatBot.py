@@ -1,16 +1,27 @@
+'''
+Project name: Chat Bot
+@author Code Pi007
+Run this file to Launch the program
+'''
+
+import threading
 from tkinter import *
 import aiml
 import os
 from Bot_commands import *
 from Weather import LiveWeather
+import keyboard
 
 window = Tk()
 window.geometry("500x470")
 window.configure(bg = "#ffffff")
+window.title('Chat Bot')
 
 entry_input = StringVar()
+SUFFIX = ' Bot >> ' 
 
 def send_input_msg():
+
     bot_commands = ['/delete', '/reload', '/learn', '/quit', '/help', '/math', '/meaning','/weather']
     delete = '/delete'
     reload = '/reload'
@@ -24,7 +35,9 @@ def send_input_msg():
 
     chat_area.config(state="normal")
     input_ = entry_input.get()
-    chat_area.insert(INSERT,' You >> '+input_+'\n')
+    if input == '':
+        return
+    chat_area.insert(INSERT,' You: '+input_+'\n')
     
     entry1.delete(0,'end')
 
@@ -36,10 +49,10 @@ def send_input_msg():
         if check_custom_commands(bot_input[0]) == 'meaning':
             
             output = meaning(bot_input[1])
-            chat_area.insert(INSERT,' Bot >> '+bot_input[1]+'\n'+output+"\n")
+            chat_area.insert(INSERT,SUFFIX+bot_input[1]+'\n'+output+"\n")
 
         else:
-            chat_area.insert(Y,' Bot >> Not a custom command. Type "/help" for a list of possible commands\n')
+            chat_area.insert(Y,SUFFIX+'Not a custom command. Type "/help" for a list of possible commands\n')
             
     elif help_ in input_:
         # split the input
@@ -49,9 +62,9 @@ def send_input_msg():
         # check which command it is
         if check_custom_commands(bot_input[0]) == 'help':
             output = str(bot_commands)
-            chat_area.insert(Y,' Bot >> '+output+"\n")
+            chat_area.insert(INSERT,SUFFIX+output+"\n")
         else:
-            chat_area.insert(Y,' Bot >> Not a custom command. Type "/help" for a list of possible commands\n')
+            chat_area.insert(Y,SUFFIX+'Not a custom command. Type "/help" for a list of possible commands\n')
 
         chat_area.config(state='disabled')
     
@@ -66,7 +79,7 @@ def send_input_msg():
 
             chat_area.delete(1.0,END)
         else:
-            chat_area.insert(Y,' Bot >> Not a custom command. Type "/help" for a list of possible commands\n')
+            chat_area.insert(Y,SUFFIX+'Not a custom command. Type "/help" for a list of possible commands\n')
             
         chat_area.config(state='disabled')
 
@@ -74,7 +87,7 @@ def send_input_msg():
 
         n = input_.split('/')
         output = LiveWeather(n[2],n[3])
-        chat_area.insert(INSERT,' Bot >> '+str(output)+'\n')
+        chat_area.insert(INSERT,SUFFIX+str(output)+'\n')
     elif learn in input_:
 
         # split the input
@@ -83,9 +96,9 @@ def send_input_msg():
         # check which command it is
         if check_custom_commands(bot_input[0]) == 'learn':
             output = learn_from_user()
-            chat_area.insert(INSERT,' Bot >> Learned!\n')
+            chat_area.insert(INSERT,SUFFIX+'Learned!\n')
         else:
-            chat_area.insert(INSERT,' Bot >> Not a custom command. Type "/help" for a list of possible commands\n')
+            chat_area.insert(INSERT,SUFFIX+'Not a custom command. Type "/help" for a list of possible commands\n')
             
         chat_area.config(state='disabled')
     
@@ -108,10 +121,10 @@ def send_input_msg():
         # check which command it is
         if check_custom_commands(bot_input[0]) == 'math':
             output = do_math(bot_input[1],bot_input[2],bot_input[3])
-            chat_area.insert(INSERT,' Bot >> '+str(output)+'\n')
+            chat_area.insert(INSERT,SUFFIX+str(output)+'\n')
 
         else:
-            chat_area.insert(INSERT,' Bot >> Not a custom command. Type "/help" for a list of possible commands\n')
+            chat_area.insert(INSERT,SUFFIX+'Not a custom command. Type "/help" for a list of possible commands\n')
             
         chat_area.config(state='disabled')
     
@@ -122,19 +135,19 @@ def send_input_msg():
 
         # check which command it is
         if check_custom_commands(bot_input[0]) == 'reload':
-            chat_area.insert(INSERT,' Bot >> Reloading...\n')
+            chat_area.insert(INSERT,SUFFIX+'Reloading...\n')
             os.remove('bot_brain.brn')
             kernel.bootstrap (learnFiles="std-startup.xml", commands="load aiml b")
             kernel.saveBrain ("bot_brain.brn")
-            chat_area.insert(INSERT,' Bot >> Reloaded\n')
+            chat_area.insert(INSERT,SUFFIX+'Reloaded\n')
 
         else:
-            chat_area.insert(INSERT,' Bot >> Not a custom command. Type "/help" for a list of possible commands\n')
+            chat_area.insert(INSERT,SUFFIX+'Not a custom command. Type "/help" for a list of possible commands\n')
             
         chat_area.config(state='disabled')
 
     else:
-        chat_area.insert(INSERT,' Bot >> '+kernel.respond(input_)+'\n')
+        chat_area.insert(INSERT,SUFFIX+kernel.respond(input_)+'\n')
         
     chat_area.config(state='disabled')
 
@@ -163,7 +176,8 @@ chat_area = Text(
     bg = "#d4d4d4",
     state='disabled',
     cursor='arrow',
-    font = 'Poppins',
+    font = 'cascadiamono',
+    fg='#000000',
     highlightthickness = 0)
 
 chat_area.place(
@@ -218,6 +232,13 @@ else:
     kernel.bootstrap(learnFiles = "std-startup.xml", commands = "load aiml b")
     kernel.saveBrain("bot_brain.brn")
 
+def enter_send():
+    while True:
+        keyboard.wait('enter')
+        send_input_msg()
+        
+# enter = threading.Thread(target=enter_send)
+# enter.start()
 
 window.resizable(False, False)
 window.mainloop()

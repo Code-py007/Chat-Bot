@@ -15,4 +15,9 @@
 <pattern>wwwssssaaa</pattern>
 <template>got it </template>
 </category>
+
+<category>
+<pattern>Your Custom Ques.</pattern>
+<template>Your Custom Ans.</template>
+</category>
 </aiml>
